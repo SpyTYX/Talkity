@@ -1,3 +1,6 @@
+// Yes, I am aware the code looks shit and not clean at all.
+// Give me some time for the next update, as I wrote this in 30 minutes while watching a movie at 4 AM.
+
 const { Client, GatewayIntentBits } = require('discord.js');
 const readline = require('readline');
 const gradient = require('gradient-string');
