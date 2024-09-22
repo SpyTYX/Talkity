@@ -10,7 +10,7 @@
 ###### ㅤ
 ### Installation
 ###### 1. Go to [Releases](https://github.com/SpyTYX/Talkity/releases/) and download the newest (stable) zip version.
-###### 2. Unzip the zip file and go to "**.env**"
-###### 3. Replace the "**TOKEN_HERE**" with your own bot's token
+###### 2. Unzip the zip file and go to "bin/TOKEN.cfg"
+###### 3. Replace the "TOKEN_HERE" with your own bot's token
 ###### 4. Run index.js
 ###### [Buy me a Coffee!](https://ko-fi.com/moonzydev)
