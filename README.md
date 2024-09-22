@@ -1,10 +1,16 @@
-# Talkity
-#### This is a project of mine using Discord.JS and Node.
-#### It allows you to connect to a Discord Bot and send messages in channels with a terminal.
-#### ㅤ
-#### Edit ./bin/TOKEN.cfg with your bot's token and run the index.js file.
-#### Afterwards using Developer Tools in Discord copy a channels ID and use 'setchannel' command to change the channel!
-#### ㅤ
-#### ㅤ
-#### I probably won't be updating this that often as its just an easy project overall, however I'll still spend time on it to do QOL changes.
-#### Made by Moonzy.dev
+![](https://i.ibb.co/BsHXnpJ/banner-talkity.png)
+### Talkity BETA (x1003)
+###### Talkity ([/tah-kih-tee/](https://i.ibb.co/7Wb3PGB/Screenshot-2024-09-22-065900.png)) is a Console-Based application designed to send messages inside of a Discord channel by a bot using the Discord.JS API and Node.JS
+###### ㅤ
+###### For Suggestions, dm me on Discord: moonzy.dev
+###### For Bug Reports, use the Issues tab.
+###### ㅤ
+### Requirements
+###### This application requires [Node](https://nodejs.org/en) to function.
+###### ㅤ
+### Installation
+###### 1. Go to [Releases](https://github.com/SpyTYX/Talkity/releases/) and download the newest (stable) zip version.
+###### 2. Unzip the zip file and go to "**.env**"
+###### 3. Replace the "**TOKEN_HERE**" with your own bot's token
+###### 4. Run index.js
+###### [Buy me a Coffee!](https://ko-fi.com/moonzydev)
