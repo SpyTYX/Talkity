@@ -1,77 +1,107 @@
 //* STATIC *\\
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const readline = require('readline');
 const gradient = require('gradient-string');
-const fs = require('fs');
+const fs = require('fs').promises;
+require('dotenv').config();
+
 const bin = './bin';
-gradient.white = gradient(['#ffffff', '#ffffff'])
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: '    '
 });
-require('dotenv').config();
 
-//* VARIABLES *\\
+//* COLOUR CODING *\\
+gradient.white = gradient(['#ffffff', '#ffffff']);
+gradient.error = gradient(['#e0443f', '#e0443f']);
+
+//* ENVIRONMENT *\\
 let TOKEN = process.env.TOKEN;
+let VERSION = process.env.VERSION;
+let BUILD = process.env.BUILD;
 let CHANNEL_ID = 'TALKITY_NO_CHANNEL_SET';
+let cache = null;
+
+//* STATIC FUNCTIONS *\\
+async function start() {
+    try {
+        const data = await fs.readFile(`${bin}/ascii.msg`, 'utf8');
+        console.log(gradient(['#569c6d', '#30e36b'])(data));
+        console.log(gradient.white(`    Version ${VERSION} || Build: ${BUILD}`));
+        console.log(gradient.white(`    Logged in as ${client.user.username}`));
+        console.log(gradient.white('    Run $cmds to see available commands'));
+    } catch (err) {console.log(gradient.error(`    Failed to run function: sync.func(start[]), Details:\n${err}`))};
+};
+
+function setChannel(id) {
+    if (/^\d+$/.test(id)) {
+        CHANNEL_ID = id;
+        cache = client.channels.cache.get(CHANNEL_ID);
+        console.log(gradient.white(`    Channel ID has been set to ${id}`));
+    } else {console.log(gradient.white(`    Oops! A Discord Channel ID can not contain any letters, did you make a typo?`))}
+}
+
+async function message(message) {
+    if (!cache) {
+        console.log(gradient.white(`    Channel Cache is clear, have you used $setchannel yet?`));
+        return;
+    }
+    try {await cache.send(message)} catch (err) {console.error('    Error sending message:', err)}
+}
 
 //* MAIN *\\
-client.once('ready', () => {
-    const filePath = `${bin}/ascii.msg`;
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        console.log('\n\n');
-        console.log(gradient(['#569c6d', '#30e36b'])(data));
-        console.log('\n\n');
-        console.log(gradient.white(`    Version 0.2.0 || Build: x1020`));
-        console.log(gradient.white(`    Logged in as ${client.user.username}`));
-        console.log(gradient.white('    Run $cmds to see available commands'))
+client.once('ready', async () => {
+    process.stdout.write(`\x1b]2;Talkity BETA ${VERSION} - ${BUILD}\x07`);
+    await start();
+    rl.prompt();
+
+    rl.on('line', (input) => {
+        const trimmedInput = input.trim();
+        const [command, ...args] = trimmedInput.split(' ');
+
+        switch (command) {
+            case '$cmds':
+                console.log(gradient.white(`    Available Commands:
+    - $cmds        || View the available commands.
+    - $info        || Displays the information about the application including Build and Version.
+    - $setchannel  || Set the channel used to send text using Discord Channel IDs.`));
+                break;
+
+            case '$setchannel':
+                setChannel(args[0]);
+                break;
+
+            case '$info':
+                console.log(gradient.white(`
+    Talkity BETA
+    Version ${VERSION}
+    Build ${BUILD}
+    
+    Made by moonzy.dev with a sprinkle of love and hatred.
+                `))
+                break;
+
+            default:
+                if (CHANNEL_ID === 'TALKITY_NO_CHANNEL_SET') {
+                    console.log(gradient.white('    Set a channel first using $setchannel {ID}'));
+                } else {
+                    message(trimmedInput);
+                }
+                break;
+        }
+
         rl.prompt();
     });
-
-    
-
-    rl.on('line', (message) => {
-        if (message === '$cmds') {
-            console.log(gradient.white(`    Available Commands:
-    - $cmds || View the available commands.
-    - $setchannel || Set the channel used to send text in to another channel using Discord Channel IDs.`))
-            rl.prompt();
-        } else if (message.startsWith('$setchannel')) {
-            const NCI = message.split(' ')[1];
-            if (NCI && /^\d+$/.test(NCI)) {
-                CHANNEL_ID = NCI;
-                console.log(gradient.white(`    Channel ID has been set to ${NCI}`));
-                rl.prompt();
-            } else {
-                console.log(gradient.white(`    Invalid Channel ID. {EXPECTED-FULL-DIGITS}`));
-                rl.prompt();
-            }
-        } else {
-            if (CHANNEL_ID === 'TALKITY_NO_CHANNEL_SET') {
-                console.log(gradient.white('    Edit the channel id by doing $setchannel {ID}'))
-                rl.prompt();
-                return;
-            }
-
-            const channel = client.channels.cache.get(CHANNEL_ID);
-            if (channel) {
-                channel.send(message)
-                    .then(() => {
-                        rl.prompt();
-                    })
-                    .catch(err => {
-                        console.error('    Error sending message: ', err);
-                        rl.prompt();
-                    });
-            } else {
-                console.log(gradient.white(`    Channel not found, does the bot have access to it?`));
-                rl.prompt();
-            }
-        }
-    })
 });
 
 //* LOGIN *\\
-client.login(TOKEN);
+if (TOKEN) {
+    client.login(TOKEN).catch(err => {
+        console.error('    There was an error while logging into your Discord Bot, Details:\n', err);
+    });
+} else if (TOKEN === 'TOKEN_HERE') {
+    console.error(`    You must edit the .env file's TOKEN value to login to your Discord Bot!`);
+}
