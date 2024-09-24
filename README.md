@@ -1,5 +1,5 @@
 ![](https://i.ibb.co/BsHXnpJ/banner-talkity.png)
-### Talkity BETA (x1020)
+### Talkity BETA (x1027)
 ###### Talkity ([/tah-kih-tee/](https://i.ibb.co/7Wb3PGB/Screenshot-2024-09-22-065900.png)) is a Console-Based application designed to send messages inside of a Discord channel by a bot using the Discord.JS API and Node.JS
 ###### ㅤ
 ###### For Suggestions, dm me on Discord: moonzy.dev
