@@ -1,6 +1,6 @@
 {
   "name": "talkity",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Allows you to remotely connect to a Discord Bot and talk in channels using a terminal!",
   "main": "main.js",
   "keywords": [],
